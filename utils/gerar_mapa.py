@@ -3,36 +3,7 @@ import numpy as np
 from utils.constantes.mapa import PAREDE, RECOMPENSA, SOLIDO, ROCHOSO, ARENOSO, PANTANO
 
 
-# def gerar_mapa(largura, altura, prob_parede=0.3, prob_recompensa=0.03):
-#     """
-#     Gera um mapa aleatório.
-#
-#     :param largura: Largura do mapa.
-#     :param altura: Altura do mapa.
-#     :param prob_parede: Probabilidade de uma célula ser uma parede.
-#     :param prob_recompensa: Probabilidade de uma célula ser uma recompensa.
-#     :return: Uma lista de listas representando o mapa.
-#     """
-#     mapa_ = []
-#
-#     for _ in range(altura):
-#         linha = []
-#         for _ in range(largura):
-#             r = random.random()  # Gera um número entre 0 e 1
-#
-#             if r < prob_parede:
-#                 linha.append(PAREDE)
-#             elif r < prob_parede + prob_recompensa:
-#                 linha.append(RECOMPENSA)
-#             else:
-#                 # Escolhe um terreno aleatoriamente, excluindo parede e recompensa
-#                 terreno = random.choice([SOLIDO, ROCHOSO, ARENOSO, PANTANO])
-#                 linha.append(terreno)
-#
-#         mapa_.append("".join(linha))
-#     return mapa_
-
-def gerar_mapa(largura, altura, prob_parede=0.3, prob_recompensa=0.03):
+def gerar_mapa(largura, altura, prob_recompensa=0.03):
     """
     Gera um mapa aleatório.
 
@@ -57,8 +28,8 @@ def gerar_mapa(largura, altura, prob_parede=0.3, prob_recompensa=0.03):
                 nova_linha.append('')
         mapa_.append(nova_linha)
 
-    for i in range(1, linhas-1):
-        for j in range(1, colunas-1):
+    for i in range(1, linhas - 1):
+        for j in range(1, colunas - 1):
             if mapa_[i][j] == PAREDE:
                 continue
             if random.random() < prob_recompensa:
@@ -115,7 +86,6 @@ def gerar_labirinto(linhas, colunas):
     grid[1:-1, 1:-1] = grid_interno
 
     return grid
-
 
 
 def mapa_para_grafo(mapa_):
