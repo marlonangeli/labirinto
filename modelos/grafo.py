@@ -1,17 +1,21 @@
+from utils.constantes.mapa import SOLIDO
+
+
 class Grafo:
     def __init__(self, mapa_, terrenos, recompensa):
         self.mapa = mapa_
         self.largura = len(mapa_[0])
         self.altura = len(mapa_)
         self.nos = [[None for _ in range(self.largura)] for _ in range(self.altura)]
-        self.TERRENOS = terrenos
-        self.RECOMPENSA = recompensa
+        self.terrenos = terrenos
+        self.recompensa = recompensa
 
         for y in range(self.altura):
             for x in range(self.largura):
-                recompensa = mapa_[y][x] == self.RECOMPENSA
-                terreno = self.TERRENOS[' '] if recompensa else self.TERRENOS[mapa_[y][x]]
+                recompensa = mapa_[y][x] == self.recompensa
+                terreno = self.terrenos[SOLIDO] if recompensa else self.terrenos[mapa_[y][x]]
                 self.nos[y][x] = No(x, y, terreno, recompensa)
+
     def vizinhos(self, no):
         dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]]
         result = []
@@ -20,6 +24,7 @@ class Grafo:
             if 0 <= x < self.largura and 0 <= y < self.altura:
                 result.append(self.nos[y][x])
         return result
+
 
 class No:
     def __init__(self, x, y, terreno, recompensa=False):
@@ -38,3 +43,5 @@ class No:
             return self.recompensa
         return str(self.terreno)
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y

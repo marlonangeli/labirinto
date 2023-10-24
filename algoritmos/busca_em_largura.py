@@ -1,5 +1,6 @@
 from collections import deque
 
+
 def busca_em_largura(grafo, inicio, objetivo):
     # Inicialização
     visitados = set()
