@@ -14,6 +14,8 @@ bau_img = madeira_img.copy()
 bau_img.blit(bau, (0, 0))
 pantano_img = redimensionar(cortar_textura(sprite_sheet, 64, 400, 16, 16), 32, 32)
 solido_plano_img = redimensionar(cortar_textura(sprite_sheet, 32, 240, 16, 16), 32, 32)
+origem_img = redimensionar(cortar_textura(sprite_sheet, 192, 160, 16, 16), 32, 32)
+destino_img = redimensionar(cortar_textura(sprite_sheet, 64, 176, 16, 16), 32, 32)
 
 TEXTURAS = {
     PAREDE: parede_img,
@@ -22,5 +24,7 @@ TEXTURAS = {
     ROCHOSO: rochoso_img,
     ARENOSO: arenoso_img,
     PANTANO: pantano_img,
-    AGENTE: parede_img
+    AGENTE: parede_img,
+    INICIO: origem_img,
+    DESTINO: destino_img
 }

@@ -12,7 +12,9 @@ def main():
     tela = pygame.display.set_mode((LARGURA, ALTURA))
     agente = Agente(1, 1)
     mapa_gerado = gerar_mapa(20, 20)
-    game_menu(mapa_gerado)
+    visualizar_mapa(mapa_gerado, agente)
+    # mapa_grafo = mapa_para_grafo(mapa_gerado)
+    # game_menu(mapa_gerado)
 
     exportar_json('mapa.json', mapa_gerado)
 
