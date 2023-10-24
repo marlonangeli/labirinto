@@ -6,15 +6,13 @@ from graficos.visualizar_mapa import visualizar_mapa
 from utils.gerar_mapa import gerar_mapa, mapa_para_grafo
 from utils.exportar_arquivo import exportar_json, importar_json
 
+
 def main():
     pygame.init()
     tela = pygame.display.set_mode((LARGURA, ALTURA))
-    # game_menu()
-    agente = Agente(0, 0)
-    mapa_gerado = gerar_mapa(25, 25)
-    # mapa_gerado = importar_json('mapa.json')
-    mapa_para_grafo(mapa_gerado)
-    visualizar_mapa(mapa_gerado, agente)
+    agente = Agente(1, 1)
+    mapa_gerado = gerar_mapa(20, 20)
+    game_menu(mapa_gerado)
 
     exportar_json('mapa.json', mapa_gerado)
 
