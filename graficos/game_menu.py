@@ -3,7 +3,8 @@ from utils.constantes.cores import *
 from utils.constantes.dimensoes import *
 from graficos.texturas import TEXTURAS
 from modelos.agente import Agente
-screen = pygame.display.set_mode((largura, altura))
+
+screen = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption("Labirinto IA")
 
 def visualizar_mapa(mapa_, agente=None):
@@ -23,13 +24,14 @@ def draw_button(text, x, y, w, h, color, hover_color=None):
     mx, my = pygame.mouse.get_pos()
     if hover_color and x <= mx <= x + w and y <= my <= y + h:
         pygame.draw.rect(screen, hover_color, (x, y, w, h))
-        pygame.draw.rect(screen, color, (x + 4, y + 4, w - 8, h - 8)) 
+        pygame.draw.rect(screen, color, (x + 4, y + 4, w - 8, h - 8))
     else:
         pygame.draw.rect(screen, color, (x, y, w, h))
 
     font = pygame.font.SysFont("arial", 28)
     text_surf = font.render(text, True, WHITE)
-    screen.blit(text_surf, (x + w//2 - text_surf.get_width()//2, y + h//2 - text_surf.get_height()//2))
+    screen.blit(text_surf, (x + w // 2 - text_surf.get_width() // 2, y + h // 2 - text_surf.get_height() // 2))
+
 
 def game_logic(search_method, map_size):
     print(f"Iniciando jogo com o método {search_method} e tamanho de mapa {map_size}")

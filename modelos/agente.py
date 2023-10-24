@@ -1,16 +1,17 @@
 import pygame
-from graficos.utils.texturas.redimensionar import redimensionar
-from graficos.utils.texturas.cortar_textura import cortar_textura
 import random
+from graficos.utils.textura import redimensionar, cortar_textura
 from utils.os import PERSONAGEM_SHEET_PATH
+
+
 class Agente:
     def __init__(self, x, y):
         self.x = x
         self.y = y
         sprite_sheet = pygame.image.load(PERSONAGEM_SHEET_PATH)
         self.tempo_ultimo_movimento = pygame.time.get_ticks()
-        self.intervalo_movimento = 1000 
-        
+        self.intervalo_movimento = 1000
+
         # Corta cada imagem do sprite sheet
         self.imagens = {
             'cima': cortar_textura(sprite_sheet, 0, 150, 56, 60),

@@ -1,5 +1,7 @@
 import pygame
 from graficos.texturas import TEXTURAS
+
+
 def visualizar_mapa(mapa_, agente=None):
     largura_celula = 32
     altura_celula = 32
@@ -16,7 +18,7 @@ def visualizar_mapa(mapa_, agente=None):
             if event.type == pygame.QUIT:
                 rodando = False
 
-        tela.fill((255, 255, 255)) 
+        tela.fill((255, 255, 255))
 
         # Desenha cada célula/tile
         for y, linha in enumerate(mapa_):

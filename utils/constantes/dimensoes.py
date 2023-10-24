@@ -1,1 +1,1 @@
-largura, altura = 640, 480
+LARGURA, ALTURA = 640, 480
