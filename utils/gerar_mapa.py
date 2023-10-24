@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from utils.constantes.mapa import PAREDE, RECOMPENSA, SOLIDO, ROCHOSO, ARENOSO, PANTANO
+from utils.constantes.mapa import PAREDE, RECOMPENSA, SOLIDO, ROCHOSO, ARENOSO, PANTANO, DESTINO, INICIO
 
 
 def gerar_mapa(largura, altura, prob_recompensa=0.03):
@@ -22,15 +22,23 @@ def gerar_mapa(largura, altura, prob_recompensa=0.03):
     for linha in labirinto:
         nova_linha = []
         for cell in linha:
-            if cell == 0:
+            if cell == 0:  # Parede
                 nova_linha.append(PAREDE)
+            elif cell == 1:  # Chão
+                nova_linha.append('')
+            elif cell == 2:  # Destino
+                nova_linha.append(DESTINO)
+            elif cell == -1:  # Início
+                nova_linha.append(INICIO)
             else:
                 nova_linha.append('')
         mapa_.append(nova_linha)
 
     for i in range(1, linhas - 1):
         for j in range(1, colunas - 1):
-            if mapa_[i][j] == PAREDE:
+            if mapa_[i][j] == PAREDE\
+                    or mapa_[i][j] == DESTINO\
+                    or mapa_[i][j] == INICIO:
                 continue
             if random.random() < prob_recompensa:
                 mapa_[i][j] = RECOMPENSA
