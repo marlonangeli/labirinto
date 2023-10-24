@@ -1,7 +1,8 @@
 import pygame
-from graficos.utils.texturas.redimensionar import redimensionar
-from graficos.utils.texturas.cortar_textura import cortar_textura
+from graficos.utils.textura import redimensionar, cortar_textura
 from utils.os import PERSONAGEM_SHEET_PATH
+
+
 class Agente:
     def __init__(self, x, y):
         self.x = x

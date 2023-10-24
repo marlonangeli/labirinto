@@ -1,4 +1,36 @@
 import random
+import numpy as np
+from utils.constantes.mapa import PAREDE, RECOMPENSA, SOLIDO, ROCHOSO, ARENOSO, PANTANO
+
+
+# def gerar_mapa(largura, altura, prob_parede=0.3, prob_recompensa=0.03):
+#     """
+#     Gera um mapa aleatório.
+#
+#     :param largura: Largura do mapa.
+#     :param altura: Altura do mapa.
+#     :param prob_parede: Probabilidade de uma célula ser uma parede.
+#     :param prob_recompensa: Probabilidade de uma célula ser uma recompensa.
+#     :return: Uma lista de listas representando o mapa.
+#     """
+#     mapa_ = []
+#
+#     for _ in range(altura):
+#         linha = []
+#         for _ in range(largura):
+#             r = random.random()  # Gera um número entre 0 e 1
+#
+#             if r < prob_parede:
+#                 linha.append(PAREDE)
+#             elif r < prob_parede + prob_recompensa:
+#                 linha.append(RECOMPENSA)
+#             else:
+#                 # Escolhe um terreno aleatoriamente, excluindo parede e recompensa
+#                 terreno = random.choice([SOLIDO, ROCHOSO, ARENOSO, PANTANO])
+#                 linha.append(terreno)
+#
+#         mapa_.append("".join(linha))
+#     return mapa_
 
 def gerar_mapa(largura, altura, prob_parede=0.3, prob_recompensa=0.03):
     """
@@ -11,23 +43,80 @@ def gerar_mapa(largura, altura, prob_parede=0.3, prob_recompensa=0.03):
     :return: Uma lista de listas representando o mapa.
     """
     mapa_ = []
+    linhas = altura
+    colunas = largura
 
-    for _ in range(altura):
-        linha = []
-        for _ in range(largura):
-            r = random.random()  # Gera um número entre 0 e 1
+    labirinto = gerar_labirinto(linhas, colunas)
 
-            if r < prob_parede:
-                linha.append('▓')
-            elif r < prob_parede + prob_recompensa:
-                linha.append('$')
+    for linha in labirinto:
+        nova_linha = []
+        for cell in linha:
+            if cell == 0:
+                nova_linha.append(PAREDE)
             else:
-                # Escolhe um terreno aleatoriamente, excluindo parede e recompensa
-                terreno = random.choice([' ', 'R', 'A', 'P'])
-                linha.append(terreno)
+                nova_linha.append('')
+        mapa_.append(nova_linha)
 
-        mapa_.append("".join(linha))
+    for i in range(1, linhas-1):
+        for j in range(1, colunas-1):
+            if mapa_[i][j] == PAREDE:
+                continue
+            if random.random() < prob_recompensa:
+                mapa_[i][j] = RECOMPENSA
+            else:
+                # Se não for recompensa, é um dos terrenos
+                terreno = random.choice([SOLIDO, ROCHOSO, ARENOSO, PANTANO])
+                mapa_[i][j] = terreno
+
     return mapa_
+
+
+def gerar_labirinto(linhas, colunas):
+    linhas_internas = linhas - 2
+    colunas_internas = colunas - 2
+    grid_interno = np.zeros((linhas_internas, colunas_internas), dtype=int)
+
+    def is_valid(linhas, colunas):
+        return 0 <= linhas < linhas_internas and 0 <= colunas < colunas_internas
+
+    def pegar_colunas_adjacente(linhas, colunas):
+        paredes_adjacentes = []
+        direcoes = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        for dir_l, dir_c in direcoes:
+            nova_lin, nova_col = linhas + dir_l * 2, colunas + dir_c * 2
+            if is_valid(nova_lin, nova_col) and grid_interno[nova_lin][nova_col] == 0:
+                paredes_adjacentes.append(((linhas + dir_l, colunas + dir_c), (nova_lin, nova_col)))
+
+        return paredes_adjacentes
+
+    nos_visitados = set()
+    # Define início e fim do labirinto aleatoriamente no lado esquerdo e direito e marca como visitado
+    linha_inicio, coluna_inicio = 0, random.randint(0, colunas_internas - 1)
+    linha_destino, coluna_destino = linhas_internas - 1, random.randint(0, colunas_internas - 1)
+    grid_interno[linha_inicio][coluna_inicio] = 1
+    nos_visitados.add((linha_inicio, coluna_inicio))
+    paredes = pegar_colunas_adjacente(linha_inicio, coluna_inicio)
+
+    while paredes:
+        (parede_lin, parede_col), (no_lin, no_col) = random.choice(paredes)
+        paredes.remove(((parede_lin, parede_col), (no_lin, no_col)))
+
+        if (no_lin, no_col) not in nos_visitados:
+            grid_interno[parede_lin][parede_col] = 1
+            grid_interno[no_lin][no_col] = 1
+            nos_visitados.add((no_lin, no_col))
+            paredes.extend(pegar_colunas_adjacente(no_lin, no_col))
+
+    grid_interno[linha_destino][coluna_destino] = 2
+    grid_interno[linha_inicio][coluna_inicio] = -1
+
+    grid = np.zeros((linhas, colunas), dtype=int)
+    grid[1:-1, 1:-1] = grid_interno
+
+    return grid
+
+
 
 def mapa_para_grafo(mapa_):
     grafo = {}
@@ -37,22 +126,23 @@ def mapa_para_grafo(mapa_):
 
     for y in range(altura):
         for x in range(largura):
-            if mapa_[y][x] != '▓':  # Se não for uma parede
+            if mapa_[y][x] != PAREDE:  # Se não for uma parede
                 vizinhos = []
 
                 # Vizinho de cima
-                if y - 1 >= 0 and mapa_[y-1][x] != '▓':
-                    vizinhos.append((x, y-1))
+                if y - 1 >= 0 and mapa_[y - 1][x] != PAREDE:
+                    vizinhos.append((x, y - 1))
                 # Vizinho da direita
-                if x + 1 < largura and mapa_[y][x+1] != '▓':
-                    vizinhos.append((x+1, y))
+                if x + 1 < largura and mapa_[y][x + 1] != PAREDE:
+                    vizinhos.append((x + 1, y))
                 # Vizinho de baixo
-                if y + 1 < altura and mapa_[y+1][x] != '▓':
-                    vizinhos.append((x, y+1))
+                if y + 1 < altura and mapa_[y + 1][x] != PAREDE:
+                    vizinhos.append((x, y + 1))
                 # Vizinho da esquerda
-                if x - 1 >= 0 and mapa_[y][x-1] != '▓':
-                    vizinhos.append((x-1, y))
+                if x - 1 >= 0 and mapa_[y][x - 1] != PAREDE:
+                    vizinhos.append((x - 1, y))
 
                 grafo[(x, y)] = vizinhos
+
     print(grafo)
     return grafo
