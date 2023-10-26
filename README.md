@@ -13,6 +13,7 @@ obstáculos. Este projeto implementa um gerador de labirintos aleatórios e forn
 
 > Projeto desenvolvido para a disciplina de Fundamentos de Sistemas Inteligentes, do curso de Ciência da Computação da Universidade Tecnológica Federal do Paraná (UTFPR), ministrada pelo professor [Thiago Franca Naves](mailto:naves@utfpr.edu.br)
 
+![labirinto](assets/labirinto.png)
 
 ## Instalação
 
@@ -41,6 +42,3 @@ python main.py
 
 ## Contribuição
 Contribuições são sempre bem-vindas! Por favor, discuta as mudanças que você deseja fazer através das issues antes de fazer um pull request.
-
-
-Claro, aqui estão alguns exemplos de badges e ícones que você pode adicionar ao seu `README.md` para torná-lo mais atraente:
