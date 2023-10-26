@@ -38,16 +38,28 @@ class Grafo:
 
                     # Vizinho de cima
                     if y - 1 >= 0 and mapa[y - 1][x] != PAREDE:
-                        vizinhos.append(No(x, y - 1, Terreno.cast(mapa[y - 1][x])))
+                        no = No(x, y - 1, Terreno.cast(mapa[y - 1][x]))
+                        if mapa[y - 1][x] == RECOMPENSA:
+                            no.recompensa = True
+                        vizinhos.append(no)
                     # Vizinho da direita
                     if x + 1 < largura and mapa[y][x + 1] != PAREDE:
-                        vizinhos.append(No(x + 1, y, Terreno.cast(mapa[y][x + 1])))
+                        no = No(x + 1, y, Terreno.cast(mapa[y][x + 1]))
+                        if mapa[y][x + 1] == RECOMPENSA:
+                            no.recompensa = True
+                        vizinhos.append(no)
                     # Vizinho de baixo
                     if y + 1 < altura and mapa[y + 1][x] != PAREDE:
-                        vizinhos.append(No(x, y + 1, Terreno.cast(mapa[y + 1][x])))
+                        no = No(x, y + 1, Terreno.cast(mapa[y + 1][x]))
+                        if mapa[y + 1][x] == RECOMPENSA:
+                            no.recompensa = True
+                        vizinhos.append(no)
                     # Vizinho da esquerda
                     if x - 1 >= 0 and mapa[y][x - 1] != PAREDE:
-                        vizinhos.append(No(x - 1, y, Terreno.cast(mapa[y][x - 1])))
+                        no = No(x - 1, y, Terreno.cast(mapa[y][x - 1]))
+                        if mapa[y][x - 1] == RECOMPENSA:
+                            no.recompensa = True
+                        vizinhos.append(no)
 
         return grafo, inicio, destino
 

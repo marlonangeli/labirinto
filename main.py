@@ -18,16 +18,17 @@ def main():
     pygame.init()
     tela = pygame.display.set_mode((LARGURA, ALTURA))
     agente = Agente(1, 1)
-    # mapa_gerado = gerar_mapa(13, 13)
-    mapa_gerado = importar_json('mapa.json')
+    mapa_gerado = gerar_mapa(17, 17, prob_recompensa=0.05)
+    # mapa_gerado = importar_json('mapa.json')
     # exportar_json('mapa.json', mapa_gerado)
 
     # game_menu(mapa_gerado)
-
-    # visualizar_mapa(mapa_gerado, agente)
     grafo = Grafo(mapa_gerado)
     # visualizar_mapa(mapa_gerado, agente)
+    # visualizar_mapa(mapa_gerado, agente)
     caminho = a_estrela(grafo, grafo.inicio, grafo.destino)
+    if caminho is None:
+        print('Não foi possível encontrar um caminho')
     visualizar_mapa(mapa_gerado, agente, caminho)
 
 
