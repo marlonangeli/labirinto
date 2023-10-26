@@ -9,7 +9,7 @@ from graficos.texturas import TEXTURAS
 from modelos.agente import Agente
 
 
-def visualizar_mapa(mapa_, agente=None):
+def view_map(mapa_, agente=None):
     largura_celula = 32
     altura_celula = 32
 
@@ -52,7 +52,7 @@ def game_menu(mapa_):
     agente = Agente(2, 2)
 
     while running:
-        visualizar_mapa(mapa_)  # Adicionando o mapa como fundo
+        view_map(mapa_)  # Adicionando o mapa como fundo
 
         agente.mover_aleatoriamente(mapa_)
         agente.desenhar(screen)

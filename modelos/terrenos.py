@@ -1,7 +1,24 @@
+from utils.constantes.mapa import SOLIDO, ROCHOSO, ARENOSO, PANTANO, PAREDE, INICIO, DESTINO, RECOMPENSA
+
+
 class Terreno:
     def __init__(self, nome, custo):
         self.nome = nome
         self.custo = custo
+
+    @staticmethod
+    def cast(terreno: str):
+        match = {
+            INICIO: SolidoPlano,
+            DESTINO: SolidoPlano,
+            SOLIDO: SolidoPlano,
+            RECOMPENSA: SolidoPlano,
+            ROCHOSO: Rochoso,
+            ARENOSO: Arenoso,
+            PANTANO: Pantano,
+            PAREDE: Parede
+        }
+        return match[terreno]()
 
     def __str__(self):
         return self.nome[0]
