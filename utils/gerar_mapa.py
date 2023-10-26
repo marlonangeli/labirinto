@@ -1,9 +1,10 @@
 import random
 import numpy as np
 from utils.constantes.mapa import PAREDE, RECOMPENSA, SOLIDO, ROCHOSO, ARENOSO, PANTANO, DESTINO, INICIO
+from modelos.grafo import Grafo, No
 
 
-def gerar_mapa(largura, altura, prob_recompensa=0.03):
+def gerar_mapa(largura: int, altura: int, prob_recompensa=0.05) -> list:
     """
     Gera um mapa aleatório.
 
@@ -50,7 +51,7 @@ def gerar_mapa(largura, altura, prob_recompensa=0.03):
     return mapa_
 
 
-def gerar_labirinto(linhas, colunas):
+def gerar_labirinto(linhas: int, colunas: int) -> np.ndarray:
     linhas_internas = linhas - 2
     colunas_internas = colunas - 2
     grid_interno = np.zeros((linhas_internas, colunas_internas), dtype=int)
@@ -96,7 +97,7 @@ def gerar_labirinto(linhas, colunas):
     return grid
 
 
-def mapa_para_grafo(mapa_):
+def mapa_para_grafo(mapa_: list):
     grafo = {}
 
     altura = len(mapa_)
@@ -122,5 +123,4 @@ def mapa_para_grafo(mapa_):
 
                 grafo[(x, y)] = vizinhos
 
-    print(grafo)
     return grafo
