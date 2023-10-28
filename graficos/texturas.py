@@ -16,6 +16,7 @@ pantano_img = redimensionar(cortar_textura(sprite_sheet, 64, 400, 16, 16), 32, 3
 solido_plano_img = redimensionar(cortar_textura(sprite_sheet, 32, 240, 16, 16), 32, 32)
 origem_img = redimensionar(cortar_textura(sprite_sheet, 192, 160, 16, 16), 32, 32)
 destino_img = redimensionar(cortar_textura(sprite_sheet, 64, 176, 16, 16), 32, 32)
+menu_img = redimensionar(cortar_textura(sprite_sheet, 0, 208, 16, 16), 64, 64)
 
 TEXTURAS = {
     PAREDE: parede_img,
@@ -26,5 +27,6 @@ TEXTURAS = {
     PANTANO: pantano_img,
     AGENTE: parede_img,
     INICIO: origem_img,
-    DESTINO: destino_img
+    DESTINO: destino_img,
+    MENU: menu_img
 }
