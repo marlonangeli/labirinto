@@ -17,11 +17,11 @@ from utils.exportar_arquivo import exportar_json, importar_json
 def main():
     pygame.init()
     tela = pygame.display.set_mode((LARGURA, ALTURA))
-    mapa_gerado = gerar_mapa(17, 17, prob_recompensa=0.05)
+    mapa_gerado = gerar_mapa(13, 13, prob_recompensa=0.05)
     # mapa_gerado = importar_json('mapa.json')
     # exportar_json('mapa.json', mapa_gerado)
 
-    #game_menu(mapa_gerado)
+    # game_menu(mapa_gerado)
     grafo = Grafo(mapa_gerado)
     # visualizar_mapa(mapa_gerado, agente)
     # visualizar_mapa(mapa_gerado, agente)
