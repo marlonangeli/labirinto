@@ -21,8 +21,28 @@ class Agente:
         }
         self.direcao = 'baixo'  # direção inicial
 
-    def desenhar(self, tela):
-        tela.blit(self.imagens[self.direcao], (self.x * 32, self.y * 32))
+    def mover_para(self, destino):
+        # Movendo para a direita
+        if destino.x > self.x:
+            self.mudar_direcao('direita')
+            self.x += 1
+        # Movendo para a esquerda
+        elif destino.x < self.x:
+            self.mudar_direcao('esquerda')
+            self.x -= 1
+        # Movendo para cima
+        elif destino.y < self.y:
+            self.mudar_direcao('cima')
+            self.y -= 1
+        # Movendo para baixo
+        elif destino.y > self.y:
+            self.mudar_direcao('baixo')
+            self.y += 1    
+
+    def desenhar(self, tela, offset_y=0):
+        altura_agente = self.imagens[self.direcao].get_height()
+        diferenca_altura = (32 - altura_agente) // 2  # Centraliza o agente no meio da célula
+        tela.blit(self.imagens[self.direcao], (self.x * 32, self.y * 32 + diferenca_altura + offset_y))
 
     def mudar_direcao(self, nova_direcao):
         if nova_direcao in self.imagens:
