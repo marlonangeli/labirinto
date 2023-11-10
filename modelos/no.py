@@ -27,6 +27,10 @@ class No:
             recompensa = True
         return No(x, y, terreno, recompensa)
 
+    @staticmethod
+    def copiar_no(no: 'No') -> 'No':
+        return No(no.x, no.y, no.terreno, no.recompensa)
+
     def adicionar_pai(self, pai: 'No') -> None:
         if pai == self:
             return

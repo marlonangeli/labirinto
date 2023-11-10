@@ -1,15 +1,17 @@
 import pygame
 from graficos.texturas import TEXTURAS
 from graficos.texturas import menu_img
+from modelos.agente import Agente
+from modelos.no import No
+from utils.constantes import cores
+from utils.constantes.dimensoes import TAMANHO_CELULA
 
 
-def visualizar_mapa(mapa_, agente=None, caminho=None, nome_algoritmo="", tamanho_mapa=""):
-    largura_celula = 32
-    altura_celula = 32
+def visualizar_mapa(mapa, agente: Agente, caminho: list[No], nome_algoritmo='', tamanho_mapa=''):
     altura_barra_info = 40
 
-    largura_tela = len(mapa_[0]) * largura_celula
-    altura_tela = len(mapa_) * altura_celula + altura_barra_info
+    largura_tela = len(mapa[0]) * TAMANHO_CELULA
+    altura_tela = len(mapa) * TAMANHO_CELULA + altura_barra_info
 
     tela = pygame.display.set_mode((largura_tela, altura_tela))
     pygame.display.set_caption("Visualização do Mapa")
@@ -18,6 +20,7 @@ def visualizar_mapa(mapa_, agente=None, caminho=None, nome_algoritmo="", tamanho
     texto_algoritmo = fonte.render(nome_algoritmo, True, (255, 153, 51))
     texto_tamanho = fonte.render(tamanho_mapa, True, (255, 153, 51))
 
+    # primeiro nó do caminho
     indice_caminho = 0
 
     while True:
@@ -36,16 +39,19 @@ def visualizar_mapa(mapa_, agente=None, caminho=None, nome_algoritmo="", tamanho
         tela.blit(texto_tamanho, (largura_tela - 10 - texto_tamanho.get_width(), 10))
 
         # Desenha cada célula/tile
-        for y, linha in enumerate(mapa_):
-            for x, celula in enumerate(linha):
-                tela.blit(TEXTURAS[celula], (x * largura_celula, y * altura_celula + altura_barra_info))
+        for x, linha in enumerate(mapa):
+            for y, celula in enumerate(linha):
+                tela.blit(TEXTURAS[celula], (x * TAMANHO_CELULA, y * TAMANHO_CELULA + altura_barra_info))
 
         # Move o agente ao longo do caminho
         if caminho and agente and indice_caminho < len(caminho):
-            agente.mover_para(caminho[indice_caminho])
+            agente.mover_para_no(caminho[indice_caminho])
             # Verifica se o agente chegou ao destino deste segmento do caminho
             if agente.x == caminho[indice_caminho].x and agente.y == caminho[indice_caminho].y:
                 indice_caminho += 1
+
+        if caminho:
+            desenhar_caminho(caminho, tela, altura_barra_info)
 
         # Desenha o agente
         if agente:
@@ -56,18 +62,18 @@ def visualizar_mapa(mapa_, agente=None, caminho=None, nome_algoritmo="", tamanho
         pygame.time.wait(300)  # Adicionado para dar um intervalo entre cada passo
 
 
-def desenhar_caminho(caminho, tela):
-
-    largura_celula = 32
-    altura_celula = 32
-
+def desenhar_caminho(caminho: list[No], tela, altura_barra=40):
     for i in range(len(caminho) - 1):
         atual = caminho[i]
         proximo = caminho[i + 1]
-        x1 = atual.x * largura_celula + largura_celula // 2
-        y1 = atual.y * altura_celula + altura_celula // 2
-        x2 = proximo.x * largura_celula + largura_celula // 2
-        y2 = proximo.y * altura_celula + altura_celula // 2
+
+        # verifica se o nó atual e o próximo são vizinhos
+        if abs(atual.x - proximo.x) > 1 or abs(atual.y - proximo.y) > 1:
+            continue
+        x1 = atual.x * TAMANHO_CELULA + TAMANHO_CELULA // 2
+        y1 = atual.y * TAMANHO_CELULA + TAMANHO_CELULA // 2 + altura_barra
+        x2 = proximo.x * TAMANHO_CELULA + TAMANHO_CELULA // 2
+        y2 = proximo.y * TAMANHO_CELULA + TAMANHO_CELULA // 2 + altura_barra
         pygame.draw.line(tela, (255, 165, 0), (x1, y1), (x2, y2), 6)
 
-        pygame.display.flip()
+    pygame.display.flip()
