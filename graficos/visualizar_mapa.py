@@ -7,7 +7,7 @@ from utils.constantes import cores
 from utils.constantes.dimensoes import TAMANHO_CELULA
 
 
-def visualizar_mapa(mapa, agente: Agente, caminho: list[No], nome_algoritmo='', tamanho_mapa=''):
+def visualizar_mapa(mapa, agente: Agente, caminho: list[list[No]], nome_algoritmo='', tamanho_mapa=''):
     altura_barra_info = 40
 
     largura_tela = len(mapa[0]) * TAMANHO_CELULA
@@ -20,7 +20,6 @@ def visualizar_mapa(mapa, agente: Agente, caminho: list[No], nome_algoritmo='', 
     texto_algoritmo = fonte.render(nome_algoritmo, True, (255, 153, 51))
     texto_tamanho = fonte.render(tamanho_mapa, True, (255, 153, 51))
 
-    # primeiro nó do caminho
     indice_caminho = 0
 
     while True:
@@ -43,26 +42,39 @@ def visualizar_mapa(mapa, agente: Agente, caminho: list[No], nome_algoritmo='', 
             for y, celula in enumerate(linha):
                 tela.blit(TEXTURAS[celula], (x * TAMANHO_CELULA, y * TAMANHO_CELULA + altura_barra_info))
 
-        # Move o agente ao longo do caminho
-        if caminho and agente and indice_caminho < len(caminho):
-            agente.mover_para_no(caminho[indice_caminho])
-            # Verifica se o agente chegou ao destino deste segmento do caminho
-            if agente.x == caminho[indice_caminho].x and agente.y == caminho[indice_caminho].y:
-                indice_caminho += 1
+        if agente:
+            desenhar_agente(agente, indice_caminho, caminho, tela, altura_barra_info)
+            indice_caminho += 1
 
         if caminho:
             desenhar_caminho(caminho, tela, altura_barra_info)
 
-        # Desenha o agente
-        if agente:
-            # Nota: o desenho do agente também é ajustado em altura para considerar a barra de informações
-            agente.desenhar(tela, altura_barra_info)
-
         pygame.display.flip()
-        pygame.time.wait(300)  # Adicionado para dar um intervalo entre cada passo
+        pygame.time.wait(100)  # Adicionado para dar um intervalo entre cada passo
 
 
-def desenhar_caminho(caminho: list[No], tela, altura_barra=40):
+def desenhar_agente(agente: Agente, indice_caminho, caminho: list[list[No]], tela, altura_barra=40):
+    # primeiro nó do caminho
+    caminho_completo = [c for subcaminho in caminho for c in subcaminho]
+
+    if indice_caminho >= len(caminho_completo):
+        return
+
+    agente.mover_para_no(caminho_completo[indice_caminho])
+    # Verifica se o agente chegou ao destino deste segmento do caminho
+    if agente.x == caminho_completo[indice_caminho].x and agente.y == caminho_completo[indice_caminho].y:
+        indice_caminho += 1
+
+    agente.desenhar(tela, altura_barra)
+    pygame.display.flip()
+
+
+def desenhar_caminho(caminho: list[list[No]], tela, altura_barra=40):
+    for subcaminho in caminho:
+        desenhar_subcaminho(subcaminho, tela, altura_barra)
+
+
+def desenhar_subcaminho(caminho: list[No], tela, altura_barra=40):
     for i in range(len(caminho) - 1):
         atual = caminho[i]
         proximo = caminho[i + 1]

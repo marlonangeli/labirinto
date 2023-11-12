@@ -16,9 +16,9 @@ from utils.gerar_mapa import gerar_mapa
 def main():
     pygame.init()
     tela = pygame.display.set_mode((LARGURA, ALTURA))
-    mapa_gerado = gerar_mapa(13, 13, prob_recompensa=0.05)
-    mapa_gerado = importar_json('mapa1.json')
-    # exportar_json('mapa1.json', mapa_gerado)
+    mapa_gerado = gerar_mapa(21, 21, prob_recompensa=0.05)
+    # mapa_gerado = importar_json('mapa2.json')
+    exportar_json('mapa2.json', mapa_gerado)
 
     # game_menu(mapa_gerado)
     grafo = Grafo(mapa_gerado)
@@ -27,7 +27,8 @@ def main():
     agente = Agente(grafo.inicio.x, grafo.inicio.y)
     if caminho is None:
         print('Não foi possível encontrar um caminho')
-    visualizar_mapa(mapa_gerado, agente, caminho, "Algoritmo A Estrela", "Pequeno")
+    else:
+        visualizar_mapa(mapa_gerado, agente, caminho, "Algoritmo A Estrela", "Pequeno")
 
 
 if __name__ == '__main__':
