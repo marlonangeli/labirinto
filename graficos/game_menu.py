@@ -1,17 +1,19 @@
 import pygame
-from utils.constantes.cores import *
-from utils.constantes.dimensoes import *
-
-screen = pygame.display.set_mode((LARGURA, ALTURA))
-pygame.display.set_caption("Labirinto IA")
-
-from graficos.texturas import TEXTURAS
+from algoritmos.a_estrela import AEstrela
+from modelos.grafo import Grafo
+from utils.constantes.dimensoes import LARGURA, ALTURA
+from utils.exportar_arquivo import exportar_json
 from modelos.agente import Agente
+from graficos.visualizar_mapa import visualizar_mapa
+from utils.gerar_mapa import gerar_mapa
+from utils.constantes.cores import *
+from graficos.texturas import TEXTURAS
 
-
+# Função para visualizar o mapa
 def view_map(mapa_, agente=None):
     largura_celula = 32
     altura_celula = 32
+    screen = pygame.display.get_surface()
 
     # Desenha cada célula/tile
     for y, linha in enumerate(mapa_):
@@ -22,8 +24,9 @@ def view_map(mapa_, agente=None):
     if agente:
         agente.desenhar(screen)
 
-
+# Função para desenhar um botão
 def draw_button(text, x, y, w, h, color, hover_color=None):
+    screen = pygame.display.get_surface()
     mx, my = pygame.mouse.get_pos()
     if hover_color and x <= mx <= x + w and y <= my <= y + h:
         pygame.draw.rect(screen, hover_color, (x, y, w, h))
@@ -35,13 +38,7 @@ def draw_button(text, x, y, w, h, color, hover_color=None):
     text_surf = font.render(text, True, WHITE)
     screen.blit(text_surf, (x + w // 2 - text_surf.get_width() // 2, y + h // 2 - text_surf.get_height() // 2))
 
-
-def game_logic(search_method, map_size):
-    print(f"Iniciando jogo com o método {search_method} e tamanho de mapa {map_size}")
-    # Aqui, você implementaria a lógica do jogo, usando o método de busca escolhido
-    pass
-
-
+# Função do menu do jogo
 def game_menu(mapa_):
     running = True
     search_methods = ['LARGURA', 'Profundidade', 'Gulosa', 'A*']
@@ -53,9 +50,7 @@ def game_menu(mapa_):
 
     while running:
         view_map(mapa_)  # Adicionando o mapa como fundo
-
-        agente.mover_aleatoriamente(mapa_)
-        agente.desenhar(screen)
+        agente.desenhar(pygame.display.get_surface())
 
         draw_button("Método: " + selected_method, LARGURA // 4, ALTURA // 4, 300, 60, DARKGREEN, GREEN)
         draw_button("Mapa: " + selected_map_size, LARGURA // 4, ALTURA // 4 + 70, 300, 60, DARKGREEN, GREEN)
@@ -64,7 +59,7 @@ def game_menu(mapa_):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return
+                return None, None
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mx, my = pygame.mouse.get_pos()
 
@@ -78,7 +73,8 @@ def game_menu(mapa_):
                     selected_map_size = map_sizes[(size_index + 1) % len(map_sizes)]
                 # Começar o jogo
                 elif LARGURA // 4 <= mx <= LARGURA // 4 + 300 and ALTURA // 2 + 100 <= my <= ALTURA // 2 + 160:
-                    game_logic(selected_method, selected_map_size)
                     running = False
 
         pygame.display.flip()
+
+    return selected_method, selected_map_size
