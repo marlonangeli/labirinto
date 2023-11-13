@@ -2,7 +2,7 @@ from utils.constantes.mapa import SOLIDO, ROCHOSO, ARENOSO, PANTANO, PAREDE, INI
 
 
 class Terreno:
-    def __init__(self, nome, custo):
+    def __init__(self, nome: str, custo: int):
         self.nome = nome
         self.custo = custo
 

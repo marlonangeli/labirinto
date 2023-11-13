@@ -12,9 +12,12 @@ class No:
         self.custo = terreno.custo
         self.g = 0  # custo do nó inicial até o nó atual
         self.h = 0  # estimativa do custo do nó atual até o nó objetivo
-        self.f = 0  # g + h
         self.pai: No = None
         self.vizinhos: list[No] = []
+
+    @property
+    def f(self):
+        return self.g + self.h
 
     @staticmethod
     def criar_no(x: int, y: int, tipo: str) -> 'No':
@@ -27,12 +30,15 @@ class No:
             recompensa = True
         return No(x, y, terreno, recompensa)
 
+    @staticmethod
+    def copiar_no(no: 'No') -> 'No':
+        return No(no.x, no.y, no.terreno, no.recompensa)
+
     def adicionar_pai(self, pai: 'No') -> None:
         if pai == self:
             return
         self.pai = pai
         self.g = pai.g + self.custo
-        self.f = self.g + self.h
 
     def adicionar_vizinho(self, vizinho: 'No') -> None:
         if vizinho == self:
@@ -69,4 +75,6 @@ class No:
         return self.f >= other.f
 
     def __ne__(self, other):
+        if other is None:
+            return True
         return self.f != other.f

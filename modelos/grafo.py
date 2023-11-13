@@ -10,12 +10,12 @@ class Grafo:
 
     @property
     def inicio(self) -> No:
-        x, y = self.__encontrar_no_mapa(INICIO)
+        x, y = self.__encontrar_terreno(INICIO)
         return self.__encontrar_por_coordenada(x, y)
 
     @property
     def destino(self) -> No:
-        x, y = self.__encontrar_no_mapa(DESTINO)
+        x, y = self.__encontrar_terreno(DESTINO)
         return self.__encontrar_por_coordenada(x, y)
 
     @property
@@ -27,22 +27,26 @@ class Grafo:
 
         return recompensas
 
+    def encontrar(self, no: No) -> No | None:
+        for _no in self.nos:
+            if _no == no:
+                return _no
+
+        return None
+
     def __criar_grafo(self):
         grafo = {}
 
         def encontrar_vizinhos(no: No) -> list[No]:
             vizinhos = []
-            for x in range(no.x - 1, no.x + 2):
-                for y in range(no.y - 1, no.y + 2):
-                    if x == no.x and y == no.y:
-                        continue
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                x2, y2 = no.x + dx, no.y + dy
+                vizinho = self.__encontrar_no_mapa(x2, y2)
+                _no = No.criar_no(x2, y2, vizinho)
 
-                    vizinho = self.__encontrar_no_mapa(x, y)
-                    _no = No.criar_no(x, y, vizinho)
-
-                    if vizinho and _no:
-                        _no.adicionar_pai(no)
-                        vizinhos.append(_no)
+                if vizinho and _no:
+                    _no.adicionar_pai(no)
+                    vizinhos.append(_no)
 
             return vizinhos
 
@@ -57,7 +61,7 @@ class Grafo:
 
         self.nos = grafo
 
-    def __encontrar_no_mapa(self, valor: str) -> tuple[int, int] | tuple[None, None]:
+    def __encontrar_terreno(self, valor: str) -> tuple[int, int] | tuple[None, None]:
         for x, linha in enumerate(self.__mapa):
             for y, coluna in enumerate(linha):
                 if coluna == valor:
