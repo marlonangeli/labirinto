@@ -75,4 +75,6 @@ class No:
         return self.f >= other.f
 
     def __ne__(self, other):
+        if other is None:
+            return True
         return self.f != other.f
