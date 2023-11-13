@@ -11,16 +11,30 @@ pygame.display.set_caption("Labirinto IA")
 from modelos.agente import Agente
 from graficos.visualizar_mapa import visualizar_mapa
 from utils.gerar_mapa import gerar_mapa
-
+from graficos.game_menu import game_menu
 
 def main():
     pygame.init()
-    tela = pygame.display.set_mode((LARGURA, ALTURA))
-    mapa_gerado = gerar_mapa(21, 21, prob_recompensa=0.05)
-    # mapa_gerado = importar_json('mapa2.json')
-    exportar_json('mapa2.json', mapa_gerado)
+    pygame.display.set_mode((LARGURA, ALTURA))
+    pygame.display.set_caption("Labirinto IA")
 
-    # game_menu(mapa_gerado)
+    mapa_menu = gerar_mapa(21, 21, prob_recompensa=0.05)
+    selected_method, selected_map_size = game_menu(mapa_menu)
+
+    if selected_method is None or selected_map_size is None:
+        return 
+
+    mapa_gerado = None
+    if selected_map_size == 'Pequeno':
+        mapa_gerado = gerar_mapa(11, 11, prob_recompensa=0.05)
+    elif selected_map_size == 'Médio':
+        mapa_gerado = gerar_mapa(17, 17, prob_recompensa=0.05)
+    elif selected_map_size == 'Grande':
+        mapa_gerado = gerar_mapa(21, 21, prob_recompensa=0.05)
+    else:
+        mapa_gerado = gerar_mapa(11, 11, prob_recompensa=0.05)
+
+    exportar_json('mapa2.json', mapa_gerado)
     grafo = Grafo(mapa_gerado)
     a_estrela = AEstrela(grafo)
     caminho = a_estrela.encontrar_caminho()
@@ -28,8 +42,7 @@ def main():
     if caminho is None:
         print('Não foi possível encontrar um caminho')
     else:
-        visualizar_mapa(mapa_gerado, agente, caminho, "Algoritmo A Estrela", "Pequeno")
-
+        visualizar_mapa(mapa_gerado, agente, caminho, selected_method, selected_map_size)
 
 if __name__ == '__main__':
     main()

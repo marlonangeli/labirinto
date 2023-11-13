@@ -22,35 +22,43 @@ def visualizar_mapa(mapa, agente: Agente, caminho: list[list[No]], nome_algoritm
 
     indice_caminho = 0
 
+    # Cria uma superfície para desenhar o mapa e o caminho uma única vez
+    fundo = pygame.Surface(tela.get_size())
+    fundo.fill((255, 255, 255))
+
+    # Desenha a textura da barra de informações na superfície do fundo
+    for i in range(0, largura_tela, menu_img.get_width()):
+        fundo.blit(menu_img, (i, 0))
+
+    # Desenha o mapa e o caminho na superfície do fundo
+    for x, linha in enumerate(mapa):
+        for y, celula in enumerate(linha):
+            fundo.blit(TEXTURAS[celula], (x * TAMANHO_CELULA, y * TAMANHO_CELULA + altura_barra_info))
+
+    if caminho:
+        desenhar_caminho(caminho, fundo, altura_barra_info)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
 
-        tela.fill((255, 255, 255))
+        # Atualiza a tela com a superfície do fundo
+        tela.blit(fundo, (0, 0))
 
-        # Desenha a barra de informações usando tiles/parede
-        for i in range(0, largura_tela, menu_img.get_width()):
-            tela.blit(menu_img, (i, 0))
-
+        # Desenha a barra de informações em cada iteração
         tela.blit(texto_algoritmo, (10, 10))
         tela.blit(texto_tamanho, (largura_tela - 10 - texto_tamanho.get_width(), 10))
 
-        # Desenha cada célula/tile
-        for x, linha in enumerate(mapa):
-            for y, celula in enumerate(linha):
-                tela.blit(TEXTURAS[celula], (x * TAMANHO_CELULA, y * TAMANHO_CELULA + altura_barra_info))
-
+        # Desenha o agente
         if agente:
             desenhar_agente(agente, indice_caminho, caminho, tela, altura_barra_info)
             indice_caminho += 1
 
-        if caminho:
-            desenhar_caminho(caminho, tela, altura_barra_info)
-
-        pygame.display.flip()
-        pygame.time.wait(100)  # Adicionado para dar um intervalo entre cada passo
+        # Atualiza a tela
+        pygame.display.update()
+        pygame.time.wait(100)  # Intervalo entre cada passo
 
 
 def desenhar_agente(agente: Agente, indice_caminho, caminho: list[list[No]], tela, altura_barra=40):
@@ -70,6 +78,7 @@ def desenhar_agente(agente: Agente, indice_caminho, caminho: list[list[No]], tel
 
 
 def desenhar_caminho(caminho: list[list[No]], tela, altura_barra=40):
+    print('desenhando caminho')
     for subcaminho in caminho:
         desenhar_subcaminho(subcaminho, tela, altura_barra)
 
